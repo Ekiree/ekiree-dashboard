@@ -35,15 +35,14 @@ jobs:
         done   
     
     - name: Install Flake
-      run: |
-        nix build
+      run: nix build
         
     - name: Check Flake
       run: nix flake check
 
     - name: Run Migrations
       run: |
-        ls
+        mysqladmin variables | grep socket
         ./result/bin/python ./ekiree_dashboard/manage.py migrate
         
     - name: Run Tests
