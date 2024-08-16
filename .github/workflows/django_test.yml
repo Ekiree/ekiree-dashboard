@@ -16,11 +16,11 @@ jobs:
         ports:
           - 3306
         env:
-          MYSQL_USER: poetfolio
-          MYSQL_PASSWORD: devdevdev
-          MYSQL_DATABASE: poetfolio_dev
-          MYSQL_ROOT_PASSWORD: devdevdev
-        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+          MARIADB_USER: poetfolio
+          MARIADB_PASSWORD: devdevdev
+          MARIADB_DATABASE: poetfolio_dev
+          MARIADB_ROOT_PASSWORD: devdevdev
+        options: --health-cmd="healthcheck.sh --connect --innodb_initialized" --health-interval=10s --health-timeout=5s --health-retries=3
           
     steps:
     - uses: actions/checkout@v4
