@@ -43,6 +43,7 @@
                 # Configure build dependencies for individual python packages
                 pypkgs-build-requirements = {
                     django-localflavor = [ "setuptools" ];
+                    django-ckeditor-5 = [ "setuptools"];
                 };
                 p2n-overrides = defaultPoetryOverrides.extend (self: super:
                   builtins.mapAttrs (package: build-requirements:

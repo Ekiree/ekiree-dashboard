@@ -5,7 +5,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 from ed.models import Term
 from phonenumber_field.modelfields import PhoneNumberField
-from ckeditor.fields import RichTextField
+from django_ckeditor_5.fields import CKEditor5Field
 from localflavor.us.models import USStateField, USZipCodeField
 import hashlib
 
@@ -38,7 +38,7 @@ class Student(models.Model):
     )
     ED_meeting_complete = models.BooleanField(default=False)    
     PR_meeting_complete = models.BooleanField(default=False)
-    narrative = RichTextField(blank=True, null=True)
+    narrative = CKEditor5Field(blank=True, null=True)
     shared_url = models.CharField(max_length=64, blank=True)
     active = models.BooleanField(default=True)
 
@@ -59,14 +59,14 @@ class Student(models.Model):
 
 class Application(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
-    essay = RichTextField(blank=True, null=True)
+    essay = CKEditor5Field(blank=True, null=True)
     last_modified = models.DateTimeField(auto_now=True)
     last_submitted = models.DateTimeField(null=True, blank=True)
     submitted = models.BooleanField(default=False)
     resubmit = models.BooleanField(default=False)
     accepted = models.BooleanField(default=False)
     rejected = models.BooleanField(default=False)
-    feedback = RichTextField(blank=True, null=True)
+    feedback = CKEditor5Field(blank=True, null=True)
     
     def __str__(self):
         return str(self.user.first_name) + " " + self.user.last_name
@@ -100,8 +100,8 @@ class OffCampusExperience(models.Model):
     experince_type  = models.CharField(max_length=3, choices=EXPERIENCE_TYPE, default="UD")
     approved  = models.CharField(max_length=3, choices=BOOLEAN_ANSWER, default="No")
     completed  = models.CharField(max_length=3, choices=BOOLEAN_ANSWER, default="No")
-    council_notes = RichTextField(blank=True, null=True)
-    reflection =  RichTextField(blank=True, null=True)
+    council_notes = CKEditor5Field(blank=True, null=True)
+    reflection =  CKEditor5Field(blank=True, null=True)
 
     def __str__(self):
         return str(self.student)
@@ -118,7 +118,7 @@ class Menu_item(models.Model):
 
 class Home_page(models.Model):
     image = models.ImageField(null=True)
-    text = RichTextField(blank=True, null=True)
+    text = CKEditor5Field(blank=True, null=True)
     publish_date = models.DateTimeField('Published',
                                         default=timezone.now,
                                        )
