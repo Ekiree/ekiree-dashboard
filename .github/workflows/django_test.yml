@@ -42,12 +42,11 @@ jobs:
     - name: Check Flake
       run: nix flake check
 
-    #- name: Run Migrations
-    #  env:
-     #   POETFOLIO_DB_HOST: 127.0.0.1
-     # run: |
-     #   ./result/bin/python ./ekiree_dashboard/manage.py makemigrations
-     #   ./result/bin/python ./ekiree_dashboard/manage.py migrate
+    - name: Run Migrations
+      env:
+        POETFOLIO_DB_HOST: 127.0.0.1
+      run: |
+        ./result/bin/python ./ekiree_dashboard/manage.py --run-syncdb
 
     - name: Run Tests
       env:
