@@ -46,8 +46,8 @@ jobs:
       env:
         POETFOLIO_DB_HOST: 127.0.0.1
       run: |
-        ./result/bin/python ./ekiree_dashboard/manage.py migrate --fake poetfolio
-        ./result/bin/python ./ekiree_dashboard/manage.py poetfolio
+        ./result/bin/python ./ekiree_dashboard/manage.py migrate --fake
+        ./result/bin/python ./ekiree_dashboard/manage.py
 
     - name: Run Tests
       env:
