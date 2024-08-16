@@ -43,9 +43,7 @@ jobs:
         nix flake check
 
     - name: Run Migrations
-      run: python manage.py migrate
+      run: ./result/bin/python ./ekiree_dashbaord/manage.py migrate
         
     - name: Run Tests
-      run: |
-        ls
-        ./result/bin/python ./ekiree_dashboard/manage.py test
+      run: ./result/bin/python ./ekiree_dashboard/manage.py test
