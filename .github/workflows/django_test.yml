@@ -44,7 +44,7 @@ jobs:
       env:
         PORT: ${{ job.services.mariadb.ports[3306] }}
       run: |
-        mysqladmin -h"127.0.01" -P"$PORT" variables | grep socket
+        mysqladmin -h"127.0.0.1" -P"$PORT" variables | grep socket
         ./result/bin/python ./ekiree_dashboard/manage.py migrate
         
     - name: Run Tests
