@@ -2,11 +2,11 @@ from django import forms
 from django.conf import settings
 from vita.models import *
 from phonenumber_field.formfields import PhoneNumberField
-from ckeditor.widgets import CKEditorWidget
+from django_ckeditor_5.widgets import CKEditor5Widget
 from localflavor.us.forms import USStateSelect, USZipCodeField
 
 class StudentNarrativeForm(forms.ModelForm):
-    narrative = forms.CharField(widget=CKEditorWidget())
+    narrative = forms.CharField(widget=CKEditor5Widget())
     class Meta:
         model = Student
         fields = ('narrative',)
@@ -30,21 +30,21 @@ class StudentInfoForm(forms.ModelForm):
                  )
 
 class ApplicationForm(forms.ModelForm):
-    essay = forms.CharField(widget=CKEditorWidget())
+    essay = forms.CharField(widget=CKEditor5Widget())
     class Meta:
         model = Application
         fields = ('essay',
                  )
 
 class ApplicationFeedbackForm(forms.ModelForm):
-    feedback = forms.CharField(widget=CKEditorWidget())
+    feedback = forms.CharField(widget=CKEditor5Widget())
     class Meta:
         model = Application
         fields = ('feedback',
                  )
 
 class OffCampusReflectForm(forms.ModelForm):
-    reflection = forms.CharField(widget=CKEditorWidget())
+    reflection = forms.CharField(widget=CKEditor5Widget())
     class Meta:
         model = OffCampusExperience
         fields = ('experince_type',
@@ -53,7 +53,7 @@ class OffCampusReflectForm(forms.ModelForm):
                  )
 
 class OffCampusCouncilNotesForm(forms.ModelForm):
-    council_notes = forms.CharField(widget=CKEditorWidget())
+    council_notes = forms.CharField(widget=CKEditor5Widget())
     class Meta:
         model = OffCampusExperience
         fields = ('approved',
