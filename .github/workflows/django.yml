@@ -24,4 +24,5 @@ jobs:
         
     - name: Run Tests
       run: |
+        ls
         ./results/bin/python ./ekiree_dashboard/manage.py test
