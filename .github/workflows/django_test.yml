@@ -12,11 +12,10 @@ jobs:
     services:
       mariadb:
         image: mariadb:latest
-        ports:
-          - 3306:3306
+        ports: [ '3306:3306' ]
         env:
           MYSQL_USER: poetfolio
-          MYSQL_PASSWORD: devdevdev
+          MYSQL_ROOT_PASSWORD: devdevdev
           MYSQL_DATABASE: poetfolio_dev
           
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
