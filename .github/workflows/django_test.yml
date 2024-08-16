@@ -9,18 +9,18 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    
     services:
       mariadb:
         image: mariadb:latest
         ports:
           - 3306
         env:
-          MYSQL_USER: poetfolio
-          MYSQ_PASSWORD: devdevdev     
-          MYSQL_ROOT_PASSWORD: devdevdev
-          MYSQL_DATABASE: poetfolio_dev
-          
-        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+          MYSQL_USER: user
+          MYSQL_PASSWORD: password
+          MYSQL_DATABASE: test
+          MYSQL_ROOT_PASSWORD: password
+        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s
           
     steps:
     - uses: actions/checkout@v4
