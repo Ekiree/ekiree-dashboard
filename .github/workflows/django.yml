@@ -15,11 +15,13 @@ jobs:
     - uses: cachix/install-nix-action@v27
     
     - name: Install Flake
-    - run: nix build
+      run: |
+        nix build
         
     - name: Check Flake
-    - run: nix flake check
+      run: |
+        nix flake check
         
-
     - name: Run Tests
-    - run: ./results/bin/python ./ekiree_dashboard/manage.py test
+      run: |
+        ./results/bin/python ./ekiree_dashboard/manage.py test
