@@ -12,11 +12,11 @@ jobs:
     services:
       mariadb:
         image: mariadb:latest
-        ports: [ '3306:3306' ]
         env:
           MYSQL_USER: poetfolio
           MYSQL_ROOT_PASSWORD: devdevdev
           MYSQL_DATABASE: poetfolio_dev
+        ports: [ '3306:3306' ]
           
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
           
@@ -39,6 +39,9 @@ jobs:
     - name: Check Flake
       run: |
         nix flake check
+
+    - name: Run Migrations
+      run: python manage.py migrate
         
     - name: Run Tests
       run: |
