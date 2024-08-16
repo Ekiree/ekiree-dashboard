@@ -15,8 +15,8 @@ jobs:
         ports:
           - 3306
         env:
-          MYSQL_USER: poetfolio
-          MYSQL_PASSWORD: devdevdev
+          MYSQL_ROOT_USER: poetfolio
+          MYSQL_ROOT_PASSWORD: devdevdev
           MYSQL_DATABASE: poetfolio_dev
           MYSQL_HOST: 127.0.0.1
           options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
