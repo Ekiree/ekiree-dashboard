@@ -18,6 +18,7 @@ jobs:
           MYSQL_USER: poetfolio
           MYSQL_PASSWORD: devdevdev
           MYSQL_DATABASE: poetfolio_dev
+          MYSQL_HOST: 127.0.0.1
           
     steps:
     - uses: actions/checkout@v4
