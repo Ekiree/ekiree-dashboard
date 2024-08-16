@@ -46,10 +46,16 @@ jobs:
         POETFOLIO_DB_USER: poetfolio
         POETFOLIO_DB_PASSWORD: devdevdev
         POETFOLIO_DB_NAME: poetfolio_dev
-        POETFOLIO_DB_HOST: 127.0.0.1
+        POETFOLIO_DB_HOST: localhost
       run: |
         mysqladmin -h"127.0.0.1" -P"$PORT" -u"poetfolio" -p"devdevdev" variables | grep socket
         ./result/bin/python ./ekiree_dashboard/manage.py migrate
-        
+
     - name: Run Tests
+      env:
+        PORT: ${{ job.services.mariadb.ports[3306] }}
+        POETFOLIO_DB_USER: poetfolio
+        POETFOLIO_DB_PASSWORD: devdevdev
+        POETFOLIO_DB_NAME: poetfolio_dev
+        POETFOLIO_DB_HOST: 127.0.0.1
       run: ./result/bin/python ./ekiree_dashboard/manage.py test
