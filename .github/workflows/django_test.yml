@@ -39,11 +39,12 @@ jobs:
         nix build
         
     - name: Check Flake
-      run: |
-        nix flake check
+      run: nix flake check
 
     - name: Run Migrations
-      run: ./result/bin/python ./ekiree_dashbaord/manage.py migrate
+      run: |
+        ls
+        ./result/bin/python ./ekiree_dashboard/manage.py migrate
         
     - name: Run Tests
       run: ./result/bin/python ./ekiree_dashboard/manage.py test
