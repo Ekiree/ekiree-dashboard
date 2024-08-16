@@ -48,7 +48,6 @@ jobs:
 
     - name: Run Migrations
       run: |
-        mysqladmin -h"127.0.0.1" -P"$PORT" -u"poetfolio" -p"devdevdev" variables | grep socket
         ./result/bin/python ./ekiree_dashboard/manage.py migrate
 
     - name: Run Tests
