@@ -42,6 +42,11 @@ jobs:
     - name: Check Flake
       run: nix flake check
 
+    - name: Set Up Environment
+      run: |
+        mkdir ./static
+        ./result/bin/python ./ekiree_dashboard/manage.py collectstatic
+
     - name: Test Migrations
       env:
         POETFOLIO_DB_HOST: 127.0.0.1
@@ -56,5 +61,4 @@ jobs:
         POETFOLIO_STATIC: ./static
         POETFOLIO_DB_HOST: 127.0.0.1
       run: |
-        mkdir ./static
         ./result/bin/python ./ekiree_dashboard/manage.py test poetfolio
