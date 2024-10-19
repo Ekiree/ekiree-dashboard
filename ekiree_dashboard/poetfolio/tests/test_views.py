@@ -7,7 +7,7 @@ from django.urls import reverse
 from poetfolio.views import *
 from vita.models import Menu_item, Home_page
 from ed.tools import *
-from siteconfig.models import HeroImage
+# from siteconfig.models import HeroImage
 
 
 class IndexTest(TestCase):

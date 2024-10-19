@@ -3,7 +3,7 @@ from vita.models import *
 from vita.forms import *
 from ed.tools import *
 from poetfolio.tools import *
-from siteconfig.models import HeroImage
+# from siteconfig.models import HeroImage
 from django.urls import reverse
 from django.views import generic
 from django.shortcuts import render
@@ -17,12 +17,14 @@ from django.core.mail import EmailMessage
 import logging
 logger = logging.getLogger(__name__)
 
-try:
-    hero = HeroImage.objects.get(app='vita')
-#except HeroImage.DoesNotExist:
-#    hero = HeroImage.objects.get(app='default')
-except:
-    hero = None
+# try:
+#     hero = HeroImage.objects.get(app='vita')
+# #except HeroImage.DoesNotExist:
+# #    hero = HeroImage.objects.get(app='default')
+# except:
+#     hero = None
+
+hero = None
 
 @login_required
 def Index(request):

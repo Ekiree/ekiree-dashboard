@@ -17,7 +17,6 @@ jobs:
           - '3306:3306'
         env:
           MARIADB_USER: poetfolio
-          MARIADB_PASSWORD: devdevdev
           MARIADB_DATABASE: poetfolio_dev
           MARIADB_ROOT_PASSWORD: devdevdev
         options: --health-cmd="healthcheck.sh --connect --innodb_initialized" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -42,13 +41,9 @@ jobs:
     - name: Check Flake
       run: nix flake check
 
-    # - name: Run Migrations
-    #   env:
-    #     POETFOLIO_DB_HOST: 127.0.0.1
-    #   run: |
-    #     ./result/bin/python ./ekiree_dashboard/manage.py migrate
-
     - name: Run Tests
       env:
         POETFOLIO_DB_HOST: 127.0.0.1
-      run: ./result/bin/python ./ekiree_dashboard/manage.py test
+      run: |
+        ./result/bin/python ./ekiree_dashboard/manage.py migrate
+        ./result/bin/python ./ekiree_dashboard/manage.py test

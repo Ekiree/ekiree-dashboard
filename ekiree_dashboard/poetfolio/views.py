@@ -11,7 +11,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 
-from siteconfig.models import HeroImage
+# from siteconfig.models import HeroImage
 
 import logging
 logger = logging.getLogger(__name__)
@@ -26,10 +26,11 @@ def Index(request):
     else:
         studentcourses = None
 
-    try:
-        hero = HeroImage.objects.get(app='default')
-    except:
-        hero = None
+    # try:
+    #     hero = HeroImage.objects.get(app='default')
+    # except:
+    #     hero = None
+    hero = None
     return render(request, 'base.html', {'pagename':'Welcome',
               'hero': hero,
               'menu': menu,
