@@ -51,8 +51,8 @@ jobs:
     - name: Run Migrations
       env:
         POETFOLIO_DB_NAME: poetfolio_dev
-        POETFOLIO_DB_USER: poetfolio
-        POETFOLIO_DB_PASSWORD: devdevdev
+        POETFOLIO_DB_USER: root
+        POETFOLIO_DB_PASSWORD: root
         POETFOLIO_DB_HOST: 127.0.0.1
       run: |
         ./result/bin/python ./ekiree_dashboard/manage.py test poetfolio
