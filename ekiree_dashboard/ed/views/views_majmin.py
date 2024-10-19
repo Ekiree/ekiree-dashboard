@@ -18,10 +18,11 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 import logging
 logger = logging.getLogger(__name__)
 
-try:
-    hero = HeroImage.objects.get(app='ed')
-except HeroImage.DoesNotExist:
-    hero = None
+# try:
+#     hero = HeroImage.objects.get(app='ed')
+# except HeroImage.DoesNotExist:
+#     hero = None
+hero = None
 
 @login_required
 def MajorMinor(request):
