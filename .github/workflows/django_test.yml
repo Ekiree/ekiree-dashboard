@@ -42,9 +42,14 @@ jobs:
     - name: Check Flake
       run: nix flake check
 
-    - name: Run Tests
+    - name: Run Migrations
       env:
         POETFOLIO_DB_HOST: 127.0.0.1
       run: |
         ./result/bin/python ./ekiree_dashboard/manage.py migrate
+
+    - name: Run Tests
+      env:
+        POETFOLIO_DB_HOST: 127.0.0.1
+      run: |
         ./result/bin/python ./ekiree_dashboard/manage.py test vita
