@@ -53,7 +53,7 @@ jobs:
       env:
         POETFOLIO_DB_HOST: 127.0.0.1
       run: |
-        ./result/bin/python ./ekiree_dashboard/manage.py migrate
+        ./result/bin/python ./ekiree_dashboard/manage.py migrate --run-syncdb
 
     - name: Test Poetfolio
       env:
