@@ -2,20 +2,20 @@ from poetfolio.tools import *
 from ed.models import *
 from ed.forms import *
 from ed.tools import *
-# from siteconfig.models import HeroImage
+from siteconfig.models import HeroImage
 from django.urls import reverse
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
 
-# try:
-#     hero = HeroImage.objects.get(app='reports')
-# #except HeroImage.DoesNotExist:
-# #    hero = HeroImage.objects.get(app='default')
-# except:
-#     hero = None
-hero = None
+try:
+    hero = HeroImage.objects.get(app='reports')
+#except HeroImage.DoesNotExist:
+#    hero = HeroImage.objects.get(app='default')
+except:
+    hero = None
+
 def ReportsIndex(request, username=None):
     user = request.user
     
