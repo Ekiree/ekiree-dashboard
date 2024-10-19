@@ -43,6 +43,8 @@ jobs:
       run: nix flake check
 
     - name: Set Up Environment
+      env:
+        POETFOLIO_STATIC: ./static
       run: |
         mkdir ./static
         ./result/bin/python ./ekiree_dashboard/manage.py collectstatic
