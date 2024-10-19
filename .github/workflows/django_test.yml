@@ -39,7 +39,7 @@ jobs:
       run: |
         ./result/bin/python ./ekiree_dashboard/manage.py migrate
 
-    - name: Run Tests
+    - name: Test Poetfolio
       env:
         POETFOLIO_DB_HOST: 127.0.0.1
       run: |
