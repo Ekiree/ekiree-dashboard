@@ -1,7 +1,5 @@
 name: Test Django
-
 on: [pull_request, push]
-
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -15,11 +13,9 @@ jobs:
         DB_DATABASE: poetfolio_dev
         DB_USER: poetfolio
         DB_PASSWORD: devdevdev
-      steps:
-        - name: Set up MySQL
-          run: |
-            sudo /etc/init.d/mysql start
-            mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }
+      run: |
+        sudo /etc/init.d/mysql start
+        mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }
     
     - name: Install Flake
       env:
