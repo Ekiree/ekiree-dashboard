@@ -11,7 +11,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 
-# from siteconfig.models import HeroImage
+from siteconfig.models import HeroImage
 
 import logging
 logger = logging.getLogger(__name__)
