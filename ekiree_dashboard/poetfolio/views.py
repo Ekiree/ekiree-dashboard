@@ -26,10 +26,11 @@ def Index(request):
     else:
         studentcourses = None
 
-    try:
-        hero = HeroImage.objects.get(app='default')
-    except:
-        hero = None
+    # try:
+    #     hero = HeroImage.objects.get(app='default')
+    # except:
+    #     hero = None
+    hero = None
     return render(request, 'base.html', {'pagename':'Welcome',
               'hero': hero,
               'menu': menu,

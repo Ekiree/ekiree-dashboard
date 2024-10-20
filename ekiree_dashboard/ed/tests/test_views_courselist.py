@@ -7,7 +7,7 @@ from django.urls import reverse
 from ed.views import *
 from ed.models import *
 from ed.tools import *
-from siteconfig.models import HeroImage
+#from siteconfig.models import HeroImage
 from vita.models import Home_page
 from datetime import date
 
@@ -114,10 +114,11 @@ class CourseListTest(TestCase):
             transform=lambda x: x
         )
 
-        try:
-            hero = HeroImage.objects.get(app='ed')
-        except HeroImage.DoesNotExist:
-            hero = None
+        # try:
+        #     hero = HeroImage.objects.get(app='ed')
+        # except HeroImage.DoesNotExist:
+        #     hero = None
+        hero = None
         self.assertIn('hero', response.context)
         #self.assertEqual(hero, response.context['hero'])
 

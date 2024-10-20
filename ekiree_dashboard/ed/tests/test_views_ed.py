@@ -7,7 +7,7 @@ from django.urls import reverse
 from ed.views import *
 from ed.models import *
 from ed.tools import *
-from siteconfig.models import HeroImage
+#from siteconfig.models import HeroImage
 from django.http import JsonResponse
 
 # TODO: class EDTest(TestCase):
@@ -294,9 +294,10 @@ class EDViewTest(TestCase):
         self.assertIn('pagename', response.context)
         self.assertEqual(response.context['pagename'], 'Educational Design')
 
-        try:
-            hero = HeroImage.objects.get(app='ed')
-        except HeroImage.DoesNotExist:
-            hero = None
+        # try:
+        #     hero = HeroImage.objects.get(app='ed')
+        # except HeroImage.DoesNotExist:
+        #     hero = None
+        hero = None
         self.assertIn('hero', response.context)
         #self.assertEqual(response.context['hero'], hero)
