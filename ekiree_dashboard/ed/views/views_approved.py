@@ -4,7 +4,7 @@ from ed.models import *
 from ed.forms import *
 from ed.tools import *
 from vita.models import Student
-# from siteconfig.models import HeroImage
+from siteconfig.models import HeroImage
 from django.db.models import Sum
 from django.urls import reverse
 from django.views import generic
@@ -18,11 +18,10 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 import logging
 logger = logging.getLogger(__name__)
 
-# try:
-#     hero = HeroImage.objects.get(app='ed')
-# except HeroImage.DoesNotExist:
-#     hero = None
-hero = None
+try:
+    hero = HeroImage.objects.get(app='ed')
+except HeroImage.DoesNotExist:
+    hero = None
 
 @login_required
 def ApprovedCourseList(request, username=None):
