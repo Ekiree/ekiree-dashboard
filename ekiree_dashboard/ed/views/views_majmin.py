@@ -4,7 +4,7 @@ from ed.models import *
 from ed.forms import *
 from ed.tools import *
 from vita.models import Student
-from siteconfig.models import HeroImage
+#from siteconfig.models import HeroImage
 from django.db.models import Sum
 from django.urls import reverse
 from django.views import generic
