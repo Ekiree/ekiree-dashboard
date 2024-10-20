@@ -10,6 +10,11 @@ class Migration(migrations.Migration):
     dependencies = [
     ]
 
+    
+    run_before = [
+        ("ed", "0001_init"),
+    ]
+
     operations = [
         migrations.CreateModel(
             name='HeroImage',
