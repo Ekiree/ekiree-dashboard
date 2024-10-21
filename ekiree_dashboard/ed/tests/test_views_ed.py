@@ -294,9 +294,10 @@ class EDViewTest(TestCase):
         self.assertIn('pagename', response.context)
         self.assertEqual(response.context['pagename'], 'Educational Design')
 
-        try:
-            hero = HeroImage.objects.get(app='ed')
-        except HeroImage.DoesNotExist:
-            hero = None
+        # try:
+        #     hero = HeroImage.objects.get(app='ed')
+        # except HeroImage.DoesNotExist:
+        #     hero = None
+        hero = None
         self.assertIn('hero', response.context)
         #self.assertEqual(response.context['hero'], hero)

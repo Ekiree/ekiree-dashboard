@@ -23,7 +23,6 @@ try:
 except HeroImage.DoesNotExist:
     hero = None
 
-
 @login_required
 def DeleteEducationalGoal(request):
     if request.method == 'POST':

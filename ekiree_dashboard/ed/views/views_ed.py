@@ -23,7 +23,6 @@ try:
 except HeroImage.DoesNotExist:
     hero = None
 
-
 def EDIndex(request):
     council = 0
     staff = 0

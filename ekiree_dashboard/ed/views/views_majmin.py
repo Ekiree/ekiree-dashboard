@@ -23,7 +23,6 @@ try:
 except HeroImage.DoesNotExist:
     hero = None
 
-
 @login_required
 def MajorMinor(request):
     user = request.user
