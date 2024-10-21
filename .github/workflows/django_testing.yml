@@ -42,44 +42,64 @@ jobs:
     - name: Check Flake
       run: nix flake check
 
+    - name: Set Up Environment
+      env:
+        POETFOLIO_STATIC: /home/runner/static
+      run: |
+        mkdir /home/runner/static
+        ./result/bin/python ./ekiree_dashboard/manage.py collectstatic
     - name: Test Migrations
       env:
         POETFOLIO_DB_HOST: 127.0.0.1
       run: |
         ./result/bin/python ./ekiree_dashboard/manage.py migrate --skip-checks
-
     - name: Test Poetfolio
       env:
-        PORT: ${{ job.services.mariadb.ports[3306] }}
+        POETFOLIO_DB_NAME: poetfolio_dev
         POETFOLIO_DB_USER: root
         POETFOLIO_DB_PASSWORD: devdevdev
-        POETFOLIO_DB_NAME: poetfolio_dev
+        POETFOLIO_STATIC: /home/runner/static
         POETFOLIO_DB_HOST: 127.0.0.1
-      run: ./result/bin/python ./ekiree_dashboard/manage.py test poetfolio
-
+      run: |
+        cd ekiree_dashboard
+        ../result/bin/python ./manage.py test poetfolio
     - name: Test Reports
       env:
-        PORT: ${{ job.services.mariadb.ports[3306] }}
+        POETFOLIO_DB_NAME: poetfolio_dev
         POETFOLIO_DB_USER: root
         POETFOLIO_DB_PASSWORD: devdevdev
-        POETFOLIO_DB_NAME: poetfolio_dev
+        POETFOLIO_STATIC: /home/runner/static
         POETFOLIO_DB_HOST: 127.0.0.1
-      run: ./result/bin/python ./ekiree_dashboard/manage.py test reports 
-
+      run: |
+        cd ekiree_dashboard
+        ../result/bin/python ./manage.py test reports
     - name: Test Vita
       env:
-        PORT: ${{ job.services.mariadb.ports[3306] }}
+        POETFOLIO_DB_NAME: poetfolio_dev
         POETFOLIO_DB_USER: root
         POETFOLIO_DB_PASSWORD: devdevdev
-        POETFOLIO_DB_NAME: poetfolio_dev
+        POETFOLIO_STATIC: /home/runner/static
         POETFOLIO_DB_HOST: 127.0.0.1
-      run: ./result/bin/python ./ekiree_dashboard/manage.py test vita 
-
+      run: |
+        cd ekiree_dashboard
+        ../result/bin/python ./manage.py test vita
+    - name: Test Siteconfig
+      env:
+        POETFOLIO_DB_NAME: poetfolio_dev
+        POETFOLIO_DB_USER: root
+        POETFOLIO_DB_PASSWORD: devdevdev
+        POETFOLIO_STATIC: /home/runner/static
+        POETFOLIO_DB_HOST: 127.0.0.1
+      run: |
+        cd ekiree_dashboard
+        ../result/bin/python ./manage.py test siteconfig
     - name: Test ED
       env:
-        PORT: ${{ job.services.mariadb.ports[3306] }}
+        POETFOLIO_DB_NAME: poetfolio_dev
         POETFOLIO_DB_USER: root
         POETFOLIO_DB_PASSWORD: devdevdev
-        POETFOLIO_DB_NAME: poetfolio_dev
+        POETFOLIO_STATIC: /home/runner/static
         POETFOLIO_DB_HOST: 127.0.0.1
-      run: ./result/bin/python ./ekiree_dashboard/manage.py ed
+      run: |
+        cd ekiree_dashboard
+        ../result/bin/python ./manage.py test ed
