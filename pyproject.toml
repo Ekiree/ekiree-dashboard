@@ -17,6 +17,7 @@ django-js-asset = "^2.2.0"
 django-localflavor = "4.0"
 django-phonenumber-field = "7.2.0"
 django-storages = "1.14.4"
+django-stubs = "^5.1.0"
 mysqlclient = "^2.2.4"
 phonenumbers = "^8.13.40"
 pillow = "11.0.0"
@@ -32,6 +33,18 @@ pip = "24.2"
 urllib3 = "2.2.2"
 poetry-core = "^1.9.1"
 setuptools = "^72.1.0"
+
+[tool.pyright]
+include = ["./"]
+
+pythonVersion = "^3.11"
+pythonPlatform = "Linux"
+
+[tool.mypy]
+plugins = ["mypy_django_plugin.main"]
+
+[tool.django-stubs]
+django_settings_module = "poetfolio.settings"
 
 [build-system]
 requires = ["poetry-core>=1.9.1"]
