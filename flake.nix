@@ -25,6 +25,12 @@
         defaultPoetryOverrides
         ;
 
+      # Configure production python application with poetry2nix
+      poetryProd = mkPoetryApplication {
+        projectDir = self;
+        overrides = p2n-overrides;
+      };
+
       # Configure development python environment with poetry2nix
       poetryDev = mkPoetryEnv {
         projectDir = self;
@@ -83,12 +89,7 @@
           '';
         };
 
-        packages.app = mkPoetryApplication {
-          projectDir = ./.;
-          overrides = p2n-overrides;
-        };
-
         # The default package when a specific package name isn't specified.
-        defaultPackage = packages.app;
+        packages.default = poetryProd.dependencyEnv;
       });
 }
