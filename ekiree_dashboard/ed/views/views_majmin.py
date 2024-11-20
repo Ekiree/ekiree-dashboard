@@ -1,25 +1,18 @@
-import datetime
-from poetfolio.tools import *
-from ed.models import *
-from ed.forms import *
-from ed.tools import *
-from vita.models import Student
-from siteconfig.models import HeroImage
-from django.db.models import Sum
-from django.urls import reverse
-from django.views import generic
-from django.shortcuts import render
-from django.shortcuts import redirect
-from django.contrib.auth.models import User, Group
-from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-
 import logging
+
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.urls import reverse
+from ed.tools import Major, Minor, all_courses, major_courses, minor_courses
+from poetfolio.tools import is_student
+from siteconfig.models import HeroImage
+
 logger = logging.getLogger(__name__)
 
 try:
-    hero = HeroImage.objects.get(app='ed')
+    hero = HeroImage.objects.get(app="ed")
 except HeroImage.DoesNotExist:
     hero = None
 
@@ -28,7 +21,7 @@ except HeroImage.DoesNotExist:
 def MajorMinor(request):
     user = request.user
 
-    if request.method == 'GET':
+    if request.method == "GET":
         if is_student(user):
             studentcourses = all_courses(user)
             major1 = major_courses(user, 1)
@@ -37,23 +30,23 @@ def MajorMinor(request):
             minor2 = minor_courses(user, 2)
             return render(
                 request,
-                'ed/MajorMinorForm.html',
+                "ed/MajorMinorForm.html",
                 {
-                    'pagename': "Major/Minor",
-                    'major1': major1,
-                    'major2': major2,
-                    'minor1': minor1,
-                    'minor2': minor2,
-                    'usercourses': studentcourses,
-                    'hero': hero,
-                }
+                    "pagename": "Major/Minor",
+                    "major1": major1,
+                    "major2": major2,
+                    "minor1": minor1,
+                    "minor2": minor2,
+                    "usercourses": studentcourses,
+                    "hero": hero,
+                },
             )
         else:
-            return HttpResponseRedirect(reverse('Index'))
+            return HttpResponseRedirect(reverse("Index"))
 
-    elif request.method == 'POST':
+    elif request.method == "POST":
         if not is_student(user):
-            return HttpResponseRedirect(reverse('Index'))
+            return HttpResponseRedirect(reverse("Index"))
 
         maj1 = None
         maj2 = None
@@ -77,20 +70,20 @@ def MajorMinor(request):
         except Minor.DoesNotExist:
             pass
 
-        studentgroup = Group.objects.get(name='student')
+        studentgroup = Group.objects.get(name="student")
         student = False
         for group in user.groups.all():
             if group == studentgroup:
                 student = True
         if student:
-            title1 = request.POST.get('maj1title')
-            sum1 = request.POST.get('maj1summary')
-            title2 = request.POST.get('maj2title')
-            sum2 = request.POST.get('maj2summary')
-            title3 = request.POST.get('min1title')
-            sum3 = request.POST.get('min1summary')
-            title4 = request.POST.get('min2title')
-            sum4 = request.POST.get('min2summary')
+            title1 = request.POST.get("maj1title")
+            sum1 = request.POST.get("maj1summary")
+            title2 = request.POST.get("maj2title")
+            sum2 = request.POST.get("maj2summary")
+            title3 = request.POST.get("min1title")
+            sum3 = request.POST.get("min1summary")
+            title4 = request.POST.get("min2title")
+            sum4 = request.POST.get("min2summary")
 
             if maj1:
                 maj1.student = user
@@ -101,10 +94,7 @@ def MajorMinor(request):
             else:
                 if title1:
                     maj1 = Major.objects.create(
-                        student=user,
-                        title=title1,
-                        description=sum1,
-                        number=1
+                        student=user, title=title1, description=sum1, number=1
                     )
                     maj1.save()
             if maj2:
@@ -116,10 +106,7 @@ def MajorMinor(request):
             else:
                 if title2:
                     maj2 = Major.objects.create(
-                        student=user,
-                        title=title2,
-                        description=sum2,
-                        number=2
+                        student=user, title=title2, description=sum2, number=2
                     )
                     maj2.save()
             if min1:
@@ -131,10 +118,7 @@ def MajorMinor(request):
             else:
                 if title3:
                     min1 = Minor.objects.create(
-                        student=user,
-                        title=title3,
-                        description=sum3,
-                        number=1
+                        student=user, title=title3, description=sum3, number=1
                     )
                     min1.save()
             if min2:
@@ -146,10 +130,7 @@ def MajorMinor(request):
             else:
                 if title4:
                     min2 = Minor.objects.create(
-                        student=user,
-                        title=title4,
-                        description=sum4,
-                        number=2
+                        student=user, title=title4, description=sum4, number=2
                     )
                     min2.save()
 
@@ -162,63 +143,69 @@ def MajorMinor(request):
             studentcourses = all_courses(user)
             return render(
                 request,
-                'ed/MajorMinorForm.html',
+                "ed/MajorMinorForm.html",
                 {
-                    'pagename': "Major/Minor",
-                    'major1': major1,
-                    'major2': major2,
-                    'minor1': minor1,
-                    'minor2': minor2,
-                    'usercourses': studentcourses,
-                    'hero': hero,
-                }
+                    "pagename": "Major/Minor",
+                    "major1": major1,
+                    "major2": major2,
+                    "minor1": minor1,
+                    "minor2": minor2,
+                    "usercourses": studentcourses,
+                    "hero": hero,
+                },
             )
 
         else:
-            return HttpResponseRedirect(reverse('Index'))
+            return HttpResponseRedirect(reverse("Index"))
     else:
-        return HttpResponseRedirect(reverse('Index'))
+        return HttpResponseRedirect(reverse("Index"))
 
 
 @login_required
 def DeleteMajor(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         try:
             user = request.user
-            major_id = int(request.POST.get('major_id'))
+            major_id = int(request.POST.get("major_id"))
             courselist = major_courses(user, major_id)
         except Major.DoesNotExist:
-            return HttpResponseRedirect(reverse('Index'))
+            return HttpResponseRedirect(reverse("Index"))
 
-        for course in courselist:
-            if major_id == 1:
-                course.maj1 = False
-                course.save()
-            if major_id == 2:
-                course.maj2 = False
-                course.save()
-        major = Major.objects.get(student=user, number=major_id)
-        major.delete()
-        return HttpResponseRedirect(reverse('CourseList'))
+        if courselist:
+            for course in courselist:
+                if major_id == 1:
+                    course.maj1 = False
+                    course.save()
+                if major_id == 2:
+                    course.maj2 = False
+                    course.save()
+            major = Major.objects.get(student=user, number=major_id)
+            major.delete()
+        return HttpResponseRedirect(reverse("CourseList"))
+    else:
+        return HttpResponseRedirect(reverse("Index"))
 
 
 @login_required
 def DeleteMinor(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         try:
             user = request.user
-            minor_id = int(request.POST.get('minor_id'))
+            minor_id = int(request.POST.get("minor_id"))
             courselist = minor_courses(user, minor_id)
         except Minor.DoesNotExist:
-            return HttpResponseRedirect(reverse('Index'))
+            return HttpResponseRedirect(reverse("Index"))
 
-        for course in courselist:
-            if minor_id == 1:
-                course.min1 = False
-                course.save()
-            if minor_id == 2:
-                course.min2 = False
-                course.save()
-        minor = Minor.objects.get(student=user, number=minor_id)
-        minor.delete()
-        return HttpResponseRedirect(reverse('CourseList'))
+        if courselist:
+            for course in courselist:
+                if minor_id == 1:
+                    course.min1 = False
+                    course.save()
+                if minor_id == 2:
+                    course.min2 = False
+                    course.save()
+            minor = Minor.objects.get(student=user, number=minor_id)
+            minor.delete()
+        return HttpResponseRedirect(reverse("CourseList"))
+    else:
+        return HttpResponseRedirect(reverse("Index"))

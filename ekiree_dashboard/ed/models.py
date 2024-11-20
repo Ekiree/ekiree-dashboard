@@ -163,6 +163,7 @@ class Minor(models.Model):
 
 
 class EDCourse(models.Model):
+    id = models.AutoField(primary_key=True)
     student = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
