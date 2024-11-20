@@ -16,8 +16,10 @@ logger = logging.getLogger(__name__)
 
 try:
     hero = HeroImage.objects.get(app="vita")
-except HeroImage.DoesNotExist:
-    hero = HeroImage.objects.get(app="default")
+# except HeroImage.DoesNotExist:
+#    hero = HeroImage.objects.get(app='default')
+except:
+    hero = None
 
 
 @login_required
