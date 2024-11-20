@@ -5,6 +5,10 @@ secrets/secrets.json
 #Results of Nix Builds
 .result/*
 
+# direnv outpus
+.direnv/
+.direnv/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
