@@ -1,25 +1,18 @@
-import datetime
-from vita.models import Menu_item, Home_page
+import logging
+
+from django.shortcuts import render
 from ed.tools import all_courses
 from poetfolio.tools import is_student
-from django.urls import reverse
-from django.views import generic
-from django.shortcuts import render
-from django.shortcuts import redirect
-from django.contrib.auth.models import User, Group
-from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-
 from siteconfig.models import HeroImage
+from vita.models import Home_page, Menu_item
 
-import logging
 logger = logging.getLogger(__name__)
 
+
 def Index(request):
-    menu = Menu_item.objects.order_by('order')
-    home = Home_page.objects.order_by('-publish_date')[0]
-    
+    menu = Menu_item.objects.order_by("order")
+    home = Home_page.objects.order_by("-publish_date")[0]
+
     user = request.user
     if is_student(request.user):
         studentcourses = all_courses(user)
@@ -27,13 +20,17 @@ def Index(request):
         studentcourses = None
 
     try:
-        hero = HeroImage.objects.get(app='default')
+        hero = HeroImage.objects.get(app="default")
     except:
         hero = None
-    return render(request, 'base.html', {'pagename':'Welcome',
-              'hero': hero,
-              'menu': menu,
-              'home': home,
-              'usercourses': studentcourses,
-        } 
+    return render(
+        request,
+        "base.html",
+        {
+            "pagename": "Welcome",
+            "hero": hero,
+            "menu": menu,
+            "home": home,
+            "usercourses": studentcourses,
+        },
     )
