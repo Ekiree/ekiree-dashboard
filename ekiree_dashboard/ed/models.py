@@ -1,7 +1,6 @@
-from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
-from django.contrib.auth.models import User
 from django import forms
+from django.contrib.auth.models import User
+from django.db import models
 
 # TODO: Switch to f-strings for string formatting.
 
@@ -18,6 +17,7 @@ class Term(models.Model):
     We store this code as an integer, and provide methods for extracting the
     year, semester name, etc.
     """
+
     code = models.PositiveIntegerField(unique=True)
 
     def year(self):
@@ -29,11 +29,11 @@ class Term(models.Model):
     def name(self):
         m = self.month()
         return {
-            1: 'January',
-            2: 'Spring',
-            6: 'Summer',
-            9: 'Fall',
-        }.get(m, '')
+            1: "January",
+            2: "Spring",
+            6: "Summer",
+            9: "Fall",
+        }.get(m, "")
 
     def __repr__(self):
         return "<Term %s>" % self.code
@@ -53,21 +53,18 @@ class Division(models.Model):
     4 = Interdisciplinary
     5 = Non-Academic
     """
+
     code = models.PositiveSmallIntegerField(unique=True)
     name = models.TextField()
 
     def numcourses(self):
-        return Course.objects.filter(
-            subject__department__division=self
-        ).count()
+        return Course.objects.filter(subject__department__division=self).count()
 
     def perccourses(self):
         total = Course.numcourses()
-        count = Course.objects.filter(
-            subject__department__division=self
-        ).count()
+        count = Course.objects.filter(subject__department__division=self).count()
 
-        return ((count/total)*100)
+        return (count / total) * 100
 
     def __repr__(self):
         return "<Division %s>" % self.name
@@ -84,17 +81,13 @@ class Department(models.Model):
     )
 
     def numcourses(self):
-        return Course.objects.filter(
-            subject__department=self
-        ).count()
+        return Course.objects.filter(subject__department=self).count()
 
     def perccourses(self):
         total = Course.numcourses()
-        count = Course.objects.filter(
-            subject__department=self
-        ).count()
+        count = Course.objects.filter(subject__department=self).count()
 
-        return ((count/total)*100)
+        return (count / total) * 100
 
     def __repr__(self):
         return "<Department %s>" % self.name
@@ -118,7 +111,7 @@ class Subject(models.Model):
     def perccourses(self):
         total = Course.numcourses()
         count = Course.objects.filter(subject=self).count()
-        return ((count/total)*100)
+        return (count / total) * 100
 
     def __repr__(self):
         return "<Subject %s>" % self.short
@@ -140,11 +133,7 @@ class Course(models.Model):
         return Course.objects.all().count()
 
     def __repr__(self):
-        return "<Course %s %s %s>" % (
-            self.subject.short,
-            self.number,
-            self.title
-        )
+        return "<Course %s %s %s>" % (self.subject.short, self.number, self.title)
 
     def __str__(self):
         return "{} {}".format(
