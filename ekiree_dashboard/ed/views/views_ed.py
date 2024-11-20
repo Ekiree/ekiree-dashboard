@@ -1,25 +1,29 @@
-import datetime
-from poetfolio.tools import *
-from ed.models import *
-from ed.forms import *
-from ed.tools import *
-from vita.models import Student
-from siteconfig.models import HeroImage
-from django.db.models import Sum
-from django.urls import reverse
-from django.views import generic
-from django.shortcuts import render
-from django.shortcuts import redirect
-from django.contrib.auth.models import User, Group
-from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-
 import logging
+
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.http import JsonResponse
+from django.shortcuts import redirect, render
+from django.urls import reverse
+from ed.models import ApprovedCourse, Course
+from ed.tools import (
+    EducationalGoal,
+    WSPcourses,
+    all_courses,
+    approved_courses,
+    courses_by_division,
+    major_courses,
+    minor_courses,
+    supporting_courses,
+)
+from poetfolio.tools import all_students, is_council, is_student, is_WSPstaff
+from siteconfig.models import HeroImage
+from vita.models import Student
+
 logger = logging.getLogger(__name__)
 
 try:
-    hero = HeroImage.objects.get(app='ed')
+    hero = HeroImage.objects.get(app="ed")
 except HeroImage.DoesNotExist:
     hero = None
 
@@ -30,41 +34,35 @@ def EDIndex(request):
     student = 0
     usrgrps = request.user.groups.all()
     for grp in usrgrps:
-        if grp.name == 'Council':
+        if grp.name == "Council":
             council = 1
-        elif grp.name == 'Staff':
+        elif grp.name == "Staff":
             staff = 1
-        elif grp.name == 'Student':
+        elif grp.name == "Student":
             student = 1
 
     return render(
         request,
-        'ed/landingpage.html',
+        "ed/landingpage.html",
         {
-            'pagename': "Welcome",
-            'council': council,
-            'staff': staff,
-            'student': student,
-            'name': request.user.username,
-            'hero': hero,
-        }
+            "pagename": "Welcome",
+            "council": council,
+            "staff": staff,
+            "student": student,
+            "name": request.user.username,
+            "hero": hero,
+        },
     )
 
 
 @login_required
-def API(request, subj='', num=''):
-    user = request.user
-
-    if request.method == 'GET':
+def API(request, subj="", num=""):
+    if request.method == "GET":
         if subj:
             if num:
-                qset_titles = Course.objects.filter(
-                    number=num,
-                    subject__short=subj
-                )
+                qset_titles = Course.objects.filter(number=num, subject__short=subj)
                 titles_dict = {
-                    c.title: c.number for c in qset_titles
-                    if c.title != 'undefined'
+                    c.title: c.number for c in qset_titles if c.title != "undefined"
                 }
                 return JsonResponse(titles_dict)
             else:
@@ -73,25 +71,27 @@ def API(request, subj='', num=''):
                 return JsonResponse(num_dict)
         else:
             if num:
-                redirect(reverse('Index'))
+                redirect(reverse("Index"))
             return JsonResponse({}, safe=False)
+    else:
+        return redirect(reverse("Index"))
 
 
 @login_required
 def ED(request, username=None):
     user = request.user
 
-    if request.method == 'POST':
+    if request.method == "POST":
         if is_WSPstaff(user) or is_council(user):
             try:
-                student = User.objects.get(id=request.POST.get('student'))
+                student = User.objects.get(id=request.POST.get("student"))
             except User.DoesNotExist:
-                return redirect(reverse('ED'))
-            return redirect(reverse('ED')+student.username)
+                return redirect(reverse("ED"))
+            return redirect(reverse("ED") + student.username)
         else:
-            return redirect(reverse('Index'))
+            return redirect(reverse("Index"))
 
-    elif request.method == 'GET':
+    elif request.method == "GET":
         if is_student(user):
             username = request.user.username
             edgoals = EducationalGoal.objects.filter(student=user)
@@ -112,36 +112,36 @@ def ED(request, username=None):
 
             return render(
                 request,
-                'ed/ED.html',
+                "ed/ED.html",
                 {
-                    'user': user,
-                    'username': username,
-                    'usercourses': studentcourses,
-                    'divcourses': divcourses,
-                    'major1': major1,
-                    'major2': major2,
-                    'minor1': minor1,
-                    'minor2': minor2,
-                    'wspcourses': wspcourses,
-                    'support': support,
-                    'edgoals': edgoals,
-                    'narrative': narrative,
-                    'pagename': "Educational Design",
-                    'hero': hero,
-                }
+                    "user": user,
+                    "username": username,
+                    "usercourses": studentcourses,
+                    "divcourses": divcourses,
+                    "major1": major1,
+                    "major2": major2,
+                    "minor1": minor1,
+                    "minor2": minor2,
+                    "wspcourses": wspcourses,
+                    "support": support,
+                    "edgoals": edgoals,
+                    "narrative": narrative,
+                    "pagename": "Educational Design",
+                    "hero": hero,
+                },
             )
         elif is_WSPstaff(user) or is_council(user):
             if username is None:
                 studentlist = all_students()
                 return render(
                     request,
-                    'ed/studentpickerform.html',
+                    "ed/studentpickerform.html",
                     {
-                        'pagename': 'Select Student',
-                        'students': studentlist,
-                        'target': 'ED',
-                        'hero': hero,
-                    }
+                        "pagename": "Select Student",
+                        "students": studentlist,
+                        "target": "ED",
+                        "hero": hero,
+                    },
                 )
             else:
                 student = User.objects.get(username=username)
@@ -163,36 +163,37 @@ def ED(request, username=None):
                 pagename = student.get_full_name() + " Educational Design"
                 return render(
                     request,
-                    'ed/ED.html',
+                    "ed/ED.html",
                     {
-                        'user': student,
-                        'username': username,
-                        'usercourses': studentcourses,
-                        'divcourses': divcourses,
-                        'major1': major1,
-                        'major2': major2,
-                        'minor1': minor1,
-                        'minor2': minor2,
-                        'wspcourses': wspcourses,
-                        'support': support,
-                        'edgoals': edgoals,
-                        'narrative': narrative,
-                        'pagename': pagename,
-                        'hero': hero,
-                    }
+                        "user": student,
+                        "username": username,
+                        "usercourses": studentcourses,
+                        "divcourses": divcourses,
+                        "major1": major1,
+                        "major2": major2,
+                        "minor1": minor1,
+                        "minor2": minor2,
+                        "wspcourses": wspcourses,
+                        "support": support,
+                        "edgoals": edgoals,
+                        "narrative": narrative,
+                        "pagename": pagename,
+                        "hero": hero,
+                    },
                 )
         else:
-            return redirect(reverse('Index'))
+            return redirect(reverse("Index"))
     else:
-        return redirect(reverse('Index'))
+        return redirect(reverse("Index"))
 
 
 @login_required
 def ApproveED(request):
     user = request.user
-    if request.method == 'POST':
+
+    if request.method == "POST":
         if is_WSPstaff(user):
-            username = request.POST.get('student')
+            username = request.POST.get("student")
             student = User.objects.get(username=username)
             ED = all_courses(student)
 
@@ -213,11 +214,8 @@ def ApproveED(request):
 
             for course in approved:
                 edcourseID = course.id
-#                if oldApproved.filter(edcourseID=edcourseID).exists():
-                if oldApproved.filter(
-                    course=course.course,
-                    student=student
-                ).exists():
+                #                if oldApproved.filter(edcourseID=edcourseID).exists():
+                if oldApproved.filter(course=course.course, student=student).exists():
                     term = course.term
                     credits = course.credits
                     completed = course.completed
@@ -231,10 +229,9 @@ def ApproveED(request):
                     notes = course.notes
 
                     update = ApprovedCourse.objects.get(
-                        course=course.course,
-                        student=student
+                        course=course.course, student=student
                     )
-#                    update = ApprovedCourse.objects.get(edcourseID=edcourseID)
+                    #                    update = ApprovedCourse.objects.get(edcourseID=edcourseID)
                     update.term = term
                     update.credits = credits
                     update.completed = completed
@@ -271,6 +268,8 @@ def ApproveED(request):
             vitaStudent.EDmeeting_complete = True
             vitaStudent.save()
 
-            return redirect(reverse('ApprovedCourses')+student.username)
+            return redirect(reverse("ApprovedCourses") + student.username)
+        else:
+            return redirect(reverse("Index"))
     else:
-        return redirect(reverse('Index'))
+        return redirect(reverse("Index"))
