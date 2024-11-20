@@ -88,6 +88,6 @@
       };
 
       # The default package when a specific package name isn't specified.
-      packages.default = poetryProd.dependencyEnv;
+      packages.${system}.default = poetryProd.dependencyEnv;
     };
 }
