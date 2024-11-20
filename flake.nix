@@ -33,7 +33,7 @@
     poetryDev = mkPoetryEnv {
       projectDir = self;
       overrides = p2n-overrides;
-      extraPackages = ps: [ps.pip ps.poetry];
+      extraPackages = ps: [ps.pip ps.poetry ps.django-stubs ];
     };
 
     # Configure build dependencies for individual python packages
