@@ -7,7 +7,6 @@
   };
 
   outputs = {
-    self,
     nixpkgs,
     poetry2nix,
     ...
@@ -20,43 +19,26 @@
       (poetry2nix.lib.mkPoetry2Nix {inherit pkgs;})
       mkPoetryApplication
       mkPoetryEnv
-      defaultPoetryOverrides
+      overrides
       ;
 
     # Configure production python application with poetry2nix
     poetryProd = mkPoetryApplication {
-      projectDir = self;
-      overrides = p2n-overrides;
+      projectDir = ./.;
+      preferWheels = true;
     };
 
     # Configure development python environment with poetry2nix
     poetryDev = mkPoetryEnv {
-      projectDir = self;
-      overrides = p2n-overrides;
-      extraPackages = ps: [ps.pip ps.poetry ps.django-stubs ];
+      projectDir = ./.;
+      # overrides = p2n-overrides;
+      preferWheels = true;
+      extraPackages = ps: [ps.django-stubs];
+      overrides = overrides.withDefaults (final: prev: {
+        # Notice that using .overridePythonAttrs or .overrideAttrs won't work!
+        reportlab = prev.reportlab.override {};
+      });
     };
-
-    # Configure build dependencies for individual python packages
-    pypkgs-build-requirements = {
-      django-localflavor = ["setuptools"];
-      django-ckeditor-5 = ["setuptools"];
-    };
-    p2n-overrides = defaultPoetryOverrides.extend (
-      self: super:
-        builtins.mapAttrs (
-          package: build-requirements:
-            (builtins.getAttr package super).overridePythonAttrs (old: {
-              buildInputs =
-                (old.buildInputs or [])
-                ++ (builtins.map (pkg:
-                  if builtins.isString pkg
-                  then builtins.getAttr pkg super
-                  else pkg)
-                build-requirements);
-            })
-        )
-        pypkgs-build-requirements
-    );
   in
     with pkgs; {
       # Development shell
@@ -65,6 +47,7 @@
           poetry
           jq
           sops
+          pkg-config
           poetryDev
         ];
 
@@ -87,7 +70,7 @@
         '';
       };
 
-      # The default package when a specific package name isn't specified.
+      # Runtime Packages
       packages.${system}.default = poetryProd.dependencyEnv;
     };
 }
