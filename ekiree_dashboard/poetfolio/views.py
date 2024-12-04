@@ -1,13 +1,15 @@
 import logging
+from urllib.parse import quote_plus, urlencode
 
-from django.shortcuts import render
+from django.conf import settings
+from django.shortcuts import redirect, render
+from django.urls import reverse
 from ed.tools import all_courses
 from poetfolio.tools import is_student
 from siteconfig.models import HeroImage
 from vita.models import Home_page, Menu_item
 
 logger = logging.getLogger(__name__)
-
 
 def Index(request):
     menu = Menu_item.objects.order_by("order")
