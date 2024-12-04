@@ -26,17 +26,21 @@
     poetryProd = mkPoetryApplication {
       projectDir = ./.;
       preferWheels = true;
+      overrides = overrides.withDefaults (final: prev: {
+        reportlab = prev.reportlab.override {
+          preferWheel = false;
+        };
+      });
     };
 
     # Configure development python environment with poetry2nix
     poetryDev = mkPoetryEnv {
       projectDir = ./.;
-      # overrides = p2n-overrides;
       preferWheels = true;
-      extraPackages = ps: [ps.django-stubs];
       overrides = overrides.withDefaults (final: prev: {
-        # Notice that using .overridePythonAttrs or .overrideAttrs won't work!
-        reportlab = prev.reportlab.override {};
+        reportlab = prev.reportlab.override {
+          preferWheel = false;
+        };
       });
     };
   in

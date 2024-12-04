@@ -28,9 +28,6 @@ urlpatterns = [
     path('', include('django.contrib.auth.urls')),
     path('', views.Index, name='Index'),
     path("ckeditor5/", include('django_ckeditor_5.urls')),
-    path("login", views.login, name="login"),
-    path("logout", views.logout, name="logout"),
-    path("callback", views.callback, name="callback"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
