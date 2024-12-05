@@ -76,6 +76,9 @@
       };
 
       # Runtime Packages
-      packages.${system}.default = poetryProd.dependencyEnv;
+      apps.${system}.default = {
+          type = "app";
+          program = "${poetryProd}/bin/";
+        };
     };
 }
